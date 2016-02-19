@@ -59,14 +59,31 @@ Release 1.0.23.90.g42187855
 ## Bugs
 
 * Genre Radio Station buttons do not render as links
+    - My guess is this is somewhere in GLUE to work it out. Potentially the button-info class is being overridden. Guess this one really depends on what the style guide calls for in this case.
 * Manually created (collaborative?) radio station does not queue tracks
 * List of radio stations does not wrap around when clicking next?
 * After quitting mid-stream, returning to genre radio returns a previously downvoted song (potentially Genre Radio is hardcoded list?)
 * After quitting mid-stream, continuing to play song and then clicking through to Radio crashes stream and skips song currently playing
     - Steps followed: start R&B radio, quit on Usher - Yeah!, restart lets me continue it, however trying to click through to Radio eg to vote, stops stream and I am jumped to Chris Brown - Say Goodbye (after Jay-Z - 99 Problems), 2 songs past where I should be.
+    - potentially because player.js sets this.currentStation to null, which I guess means the player is initialized as per the current song in localStorage. Something in there with onStationStarted is probably conflicting here. My guess is this is a scope problem.
+    - might be PlayerState not saving/retrieving current station, meaning it's only fetched on the radio page?
 * Can't modify a vote once cast
     - if we wanted to do it, would have to send new feedback, as well as enable button state.
     - Removing from Liked From Radio does nothing, somewhat obviously
+
+## Code Comments
+
+*Caveat: I'm not as familiar with Angular, so it's a little hard to tell if some things are idiomatic or just spat out as part of the build system.*
+
+* radio: Is there a way to not package all of Angular (122K) and jQuery (82K) in? Even minified...
+* Would you want to log specific genre when a genre-station is triggered, rather than just a seed title? Could be my misunderstanding here, perhaps the `spotify:genre` index is enough to retrieve
+* radio and radio-hub: Some languages missing translations (maybe not available in those regions?), eg in radio-hub:
+    "hi": "app.description",
+    "ko": "app.description",
+    "ro": "app.description",
+    "ru": "app.description",
+    "ta": "app.description",
+    "th": "app.description",
 
 ## General Notes
 

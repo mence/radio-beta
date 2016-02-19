@@ -1,7 +1,9 @@
 # Radio Beta Release
 
-Tested on OSX 10.10.5
-Release 1.0.23.90.g42187855
+This was tested on:
+* OSX 10.10.5
+* App release: 1.0.23.90.g42187855
+* Radio commit tag: cb2a761
 
 ## Primary functional tests
 

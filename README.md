@@ -67,3 +67,16 @@ Release 1.0.23.90.g42187855
 * Can't modify a vote once cast
     - if we wanted to do it, would have to send new feedback, as well as enable button state.
     - Removing from Liked From Radio does nothing, somewhat obviously
+
+## General Notes
+
+* Spotify app allows you to zoom in/out (because it's just a Chromium wrapper)?
+* MusixMatch app bar wording is ... awkward: "Download now MusixMatch on your mobile"
+* Inconsistent titling of musixmatch/MusixMatch/Musixmatch
+* [MusixMatch link for iOS](http://bit.ly/iPhonemXm) leads to [GB App Store](https://itunes.apple.com/gb/app/musixmatch-lyrics-player/id448278467?mt=8) not US.
+    - MusixMatch App Store Links:
+        - [iOS](http://bit.ly/iPhonemXm)
+        - [Android](http://bit.ly/androidmXm)
+        - [Windows](http://bit.ly/wp7mXm)
+* About Spotify page copyright tag has not been updated for 2016.
+* Inconsistent naming of the Spotify Support Community (referred to Help > Spotify Community) in app.

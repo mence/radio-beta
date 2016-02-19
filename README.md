@@ -41,3 +41,29 @@ Release 1.0.23.90.g42187855
     - Song should never appear in the list again
 * Clicking current song should take me to the Radio
 * After quitting mid-stream, I should be able to return to the song?
+
+## Notes
+
+* Radio stations list becomes unwieldy at large numbers (eg >20).
+* Not possible to rate past songs (ala Pandora)
+* Clicking play on album cover after pausing in Radio restarts the song
+* Only way to upvote/downvote a Radio song is on Radio page (secondary clickthrough to Radio page required from currently playing)
+* Recommended Radio stations does not regenerate based on Radio interaction
+* Cannot search for Radio stations
+* VERY GENERAL: Hard to differentiate between a playlist and Radio sometimes. For instance, Discover playlists can feel a bit like Radio
+* Liking (upvoting) a song takes a small amount of time to appear in Liked From Radio playlist
+* No way to train Radio ahead of time (eg through Next Songs).
+* Is Radio truly drawing from a genre list? Seems like there is 50-100 songs that are essentially just on random?
+* Can't create a user radio?
+
+## Bugs
+
+* Genre Radio Station buttons do not render as links
+* Manually created (collaborative?) radio station does not queue tracks
+* List of radio stations does not wrap around when clicking next?
+* After quitting mid-stream, returning to genre radio returns a previously downvoted song (potentially Genre Radio is hardcoded list?)
+* After quitting mid-stream, continuing to play song and then clicking through to Radio crashes stream and skips song currently playing
+    - Steps followed: start R&B radio, quit on Usher - Yeah!, restart lets me continue it, however trying to click through to Radio eg to vote, stops stream and I am jumped to Chris Brown - Say Goodbye (after Jay-Z - 99 Problems), 2 songs past where I should be.
+* Can't modify a vote once cast
+    - if we wanted to do it, would have to send new feedback, as well as enable button state.
+    - Removing from Liked From Radio does nothing, somewhat obviously

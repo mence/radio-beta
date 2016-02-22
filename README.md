@@ -4,8 +4,8 @@ Hi all,
 
 I've finished my assessment of the beta radio release. I've captured my notes under a few broad headings:
 
-1. [Primary functional tests](#primary-functional-tests)
-2. [Exploratory tests](#exploratory-tests)
+1. [Primary functional tests](#primary-functional-tests-conducted)
+2. [Exploratory tests](#exploratory-tests-conducted)
 3. [Bugs](#bugs)
 4. [Notes for Discussion](#notes-for-discussion)
 5. [Code Review](#code-review)
@@ -17,7 +17,9 @@ My test session was conducted on:
 * Application release version: `1.0.23.90.g42187855`
 * Radio release SHA: `cb2a761`
 
-## Primary functional tests
+The summary of my findings is that Radio is ready for release. Whilst some minor issues were found, none of them are significant enough in my view to prevent getting this out there and letting us get more data about how it's used.
+
+## Primary functional tests conducted
 
 *These were the initial set of tests conducted when checking the core functions.These should be the primary regression tests, either checked manually or preferably through an automated test.*
 
@@ -30,9 +32,9 @@ My test session was conducted on:
 * I can thumbs down the currently playing song - **PASS**
 * Creating a station saves it to my stations - **PASS**
 
-## Exploratory Tests
+## Exploratory tests conducted
 
-*These were some other checks done. If automating these tests, these would become unit tests or integration tests.*
+*These were other checks done as part of an exploratory session. If you were to automate these tests, these could become unit tests or integration tests.*
 
 * Shuffle should be disabled - **PASS**
 * Queue (Next Tracks) should be filled with songs from radio when radio is started - **PASS**
@@ -97,7 +99,7 @@ My test session was conducted on:
 * Manually created collaborative radio stations do not always queue tracks. This was hard to recreate consistently. I didn't consider this a bug at the moment because it seemed highly test data dependent.
 * We're not indicating to the friends feed that I'm listening to a radio station.
 * Radio stations are unique to a device, meaning that handoff drops some of the features such as voting.
-* When visiting Radio as a brand new user, I was suggested one radio station for Drake. This felt a little weird, as you really don't know what kind of user I am yet. An empty state encouraging me to create stations with some songs/artists would be better than a artist you have no idea if I like.
+* When visiting Radio as a brand new user, I was suggested one radio station for Drake. This felt a little weird, as you don't know what kind of user I am yet. An empty state encouraging me to create stations with some songs/artists would be better than a artist you have no idea if I like.
 
 ## Code Comments
 
@@ -109,25 +111,37 @@ My test session was conducted on:
 
 ## Summary and Next Steps
 
-In my opinion, Radio is ready for release. The things identified don't break any of the major functions and integration as a whole seems stable. A big future focus for me would be seamless handoff as we have in the other player function.
+In my opinion, Radio is ready for release. The things identified don't break any of the major functions and integration as a whole seems stable.
 
-### Progressing from Manual Testing to Automated Testing
+### Future Testing: Progressing from Manual Testing to Automated Testing
+
+In terms of future testing, I think the team will likely move through the following broad stages:
+
+1. Manual QA / Exploratory
+2. Automating safety (UI or core functional)
+3. Build out automation
 
 **1. Release and Immediate Future**
 
-The team will probably have to stick with manual testing efforts. I would create a checklist of features to check (the primary functional tests I identified could be a starting point) prior to release. If there is a large burden of manual regression testing here, it might be worth considering something like [BrowserStack](https://www.browserstack.com/) or [Rainforest QA](https://www.rainforestqa.com/) to offload some of this testing, particularly across platforms.
+The team will probably have to stick with manual testing efforts at the moment until we see how Radio goes.
+
+I would create a checklist of features to verify (the [primary functional tests](#primary-functional-tests-conducted) I identified could be a starting point) prior to release. One way for the team to make this part of their workflow is simply for everyone to use the release candidate build as their primary app, and you can only listen to Radio stations (aka dogfooding).
+
+I'd suggest a code freeze 2-3 days prior to the bi-weekly release date and then cut your release candidate at that point. A focused regression and exploratory test session then gives you time to hotfix prior to release.
+
+Another technique you can use is every member of the team rotates through being the "QA" and assessing the product prior to release. It means everyone has to have an appreciation for where the product is at, and that manual QA doesn't become a chore assigned to one person only.
 
 **2. Safety**
 
-If it looks like we're going to continue with Radio, I would look to build a smoke automated test suite of the primary functional tests. We can probably just write this in Jasmine. This provides safety to ensure we haven't broken anything major.
+If it looks like we're going to continue with Radio, I would look to build a smoke automated test suite of the primary functional tests. We can probably just write this in [Jasmine](https://jasmine.github.io/). This provides safety to ensure we haven't broken anything major.
 
 **3. Functional Tests / Test Per Feature**
 
 Once future development begins, we can build out this suite with a series of functional tests. Each new feature worked on should come with test(s) covering the happy path as well as any edge cases or requirements.
 
-It might be worth making a very minimal API test suite to check the behaviour and structure of the various services we're integrating with to ensure the test contracts are maintained.
+It might be worth making a very minimal API test suite to check the behaviour and structure of the various services we're integrating with to ensure the test contracts are maintained. This could be in Jasmine, a DSL like [Frisby](http://frisbyjs.com/) or a different framework.
 
-We might want to consider rewriting the smoke tests into more of a user journey test suite, following the path across a number of application components and actions (these should be very minimal, 10 max.)
+We might want to consider rewriting the smoke tests into more of a user journey test suite, following the path a user takes across a number of application components and actions, for instance: creating a station, issuing thumbs ups and editing queues. These broader tests should be very minimal, 10 max.
 
 **4. Integrations, TDD**
 
@@ -139,9 +153,28 @@ Now that we are in the flow of writing tests per feature, we should investigate:
 At this point it's worth considering larger testing concerns such as:
 
 * Actual OS-based testing: How does the overall product behave on OSX and Windows? Can we build or run our smoke tests against real machines?
-    - For interest's sake, I hacked together a [proof of concept of an OSX automated test](test/hammerspoon/README.md) using [Hammerspoon](http://www.hammerspoon.org/). An alternative would be [SikuliX](http://www.sikulix.com/) which has the advantage of being cross-platform, as well as letting you code in a wider range of languages.
+    - For interest's sake, I hacked together a [proof of concept of an OSX automated test](test/hammerspoon/README.md) using [Hammerspoon](http://www.hammerspoon.org/).
+    - Alternative options could be:
+        + [SikuliX](http://www.sikulix.com/) which has the advantage of being cross-platform, as well as letting you code in a wider range of languages (Python, Ruby, Java) as well as an IDE for graphical test creation
+        + ChromeDriver for Selenium to drive the app in dev mode on actual OSX and Windows machines
 * Performance testing: How does our application behave when the backend servers are under load? Are there rendering limits in the UI?
 * Cross-platform testing: investigate if it's possible to send tests to a cross platform test suite such as [SauceLabs](https://saucelabs.com/).
+
+### Product ideas for discussion
+
+*Some other suggestions for product improvements that I noticed during the test session*
+
+* Try different UI designs, potentially even A/B testing them across users
+    - Currently it seems like GLUE is pretty tightly coupled to the implementation. Maybe consider ripping player styles out to a different CSS file?
+* Better surfacing Radio - it feels like discovery of Radio is pretty hard. If you miss the sidebar item, there's very little to drive you to discovering and using Radio.
+* Allow power tweaking/vote editing - This feels like a difference to Pandora. It would be worth testing what the usage of such a feature would be and if this attracts power users more.
+* Making Radio stations shareable - this might move Radio to more of it's own object, as in sharing a station could mean sharing the seed track plus the vote history to rebuild the station.
+* Indicating friends who are listening to a station - by clicking their station so you can listen along.
+* Deeper integration into the echoNest data to get that "woah that's a great song" feeling in there (leading to less of a playlist on shuffle feel, and rather more like listening to a cool DJ)
+* Could Radio become a separate app?
+    - Can we decouple some of the radio player logic out for a separate Spotify app?
+    - Could decoupling logic help other long tail implmentations such as Roku, car, etc?
+* Making connect Radio a seamless handoff as we have done in the other player functions. This might require Radio to become a more dominant part of the schema.
 
 ## Other Application Notes
 
@@ -162,4 +195,4 @@ At this point it's worth considering larger testing concerns such as:
 
 ##### Generating these notes in different formats
 
-If you'd like to view these notes as a [PDF](README.pdf), [BUILD.md](BUILD.md) details how to generate a copy via pandoc.
+If you'd like to view these notes as a [PDF](README.pdf), [BUILD.md](build/BUILD.md) details how to generate a copy via [pandoc](http://www.pandoc.org/).

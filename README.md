@@ -55,7 +55,7 @@ This was tested on:
 
 *These were bugs indentified during the session. Where possible, I've tried to hunt down a root-cause for the bug which I hope helps.*
 
-* Genre Radio Station buttons do not render as links
+* Genre Radio Station buttons do not render as links on mouseover
     - My guess is this is somewhere in GLUE to work it out. Potentially the button-info class is being overridden. Guess this one really depends on what the style guide calls for in this case.
 * After quitting mid-stream, returning to genre radio returns a previously downvoted song.
     - Potentially this is an effect of Genre Radio stations pulling from a limited set of songs (see [Notes](#notes-for-discussion))
@@ -87,6 +87,46 @@ This was tested on:
 * Radio stations are unique to a device, meaning that handoff drops some of the features such as voting.
 * When visiting Radio as a brand new user, I was suggested one radio station for Drake. This felt a little weird, as you really don't know what kind of user I am yet. An empty state encouraging me to create stations with some songs/artists would be better than a artist you have no idea if I like.
 
+## Code Comments
+
+*Caveat: I'm not as familiar with Angular, so it's a little hard to tell if some things are idiomatic or just spat out as part of the build system.*
+
+* `/radio`: Is there a way to not package all of Angular (122K) and jQuery (82K) in?
+* Would you want to log specific genre when a genre-station is triggered, rather than just a seed title? Could be my misunderstanding here, perhaps the `spotify:genre` index is enough to retrieve the seed
+* radio and radio-hub: Some languages missing translations (maybe not available in those regions?), eg in radio-hub: `hi`, `ko`, `ro`, `ru`, `ta`, `th` all seem to be missing translations.
+
+## Next Steps
+
+In my opinion, Radio is ready for release. The things identified don't break any of the major functions and integration as a whole seems stable.
+
+### Progressing from Manual Testing to Automated Testing
+
+**1. Release and Immediate Future**
+
+The team will probably have to stick with manual testing efforts. I would create a checklist of features to check (the primary functional tests I identified could be a starting point) prior to release. If there is a large burden of manual regression testing here, it might be worth considering something like [BrowserStack](https://www.browserstack.com/) [Rainforest QA](https://www.rainforestqa.com/) to offload some of this testing, particularly across platforms.
+
+**2. Safety**
+
+If it looks like we're going to continue with Radio, I would look to build a smoke automated test suite of the primary functional tests. We can probably just write this in Jasmine. This provides safety to ensure we haven't broken anything major.
+
+**3. Functional Tests / Test Per Feature**
+
+Once future development begins, we can build out this suite with a series of functional tests. Each new feature worked on should come with test(s) covering the happy path as well as any edge cases or requirements.
+
+It might be worth making a very minimal API test suite to check the behaviour and structure of the various services we're integrating with to ensure the test contracts are maintained.
+
+We might want to consider rewriting the smoke tests into more of a user journey test suite, following the path across a number of application components and actions (these should be very minimal, 10 max.)
+
+**4. Integrations, TDD**
+
+Now that we are in the flow of writing tests per feature, we should investigate:
+
+* Following TDD style of preparing tests and developing.
+* Refactoring the existing suite wherever possible to move higher-level tests into unit tests for speeds sake. However be careful here if we end up mocking too much away, we might not be capturing the actual behaviour. Consider retaining some of the functional tests.
+* Larger testing concerns such as:
+    - Performance testing: How does our application behave when the backend servers are under load? Are there rendering limits in the UI?
+    - Cross-platform testing: investigate if it's possible to send tests to a cross platform test suite such as [SauceLabs](https://saucelabs.com/).
+
 ## Overall Application Notes for Discussion
 
 *I'll raise them with the other teams but I've kept them in these test notes as part of the session.*
@@ -101,25 +141,3 @@ This was tested on:
         - [Windows](http://bit.ly/wp7mXm)
 * The About Spotify page copyright tag has not been updated for 2016.
 * There is inconsistent naming of the Spotify Support Community (referred to Help > Spotify Community) in app.
-
-## Code Comments
-
-*Caveat: I'm not as familiar with Angular, so it's a little hard to tell if some things are idiomatic or just spat out as part of the build system.*
-
-* `/radio`: Is there a way to not package all of Angular (122K) and jQuery (82K) in?
-* Would you want to log specific genre when a genre-station is triggered, rather than just a seed title? Could be my misunderstanding here, perhaps the `spotify:genre` index is enough to retrieve the seed
-* radio and radio-hub: Some languages missing translations (maybe not available in those regions?), eg in radio-hub: `hi`, `ko`, `ro`, `ru`, `ta`, `th` all seem to be missing translations.
-
-## Next Steps
-
-### Progressing from Manual Testing to Automated Testing
-
-- how to effectively scale, etc
-- safety first
-- core journeys
-- functional
-- integrations
-- unit tests
-
-
-

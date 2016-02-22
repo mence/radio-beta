@@ -2,15 +2,18 @@
 
 This was tested on:
 
-* OSX 10.10.5 and 10.9.5
-* App release: 1.0.23.90.g42187855
-* Radio commit tag: cb2a761
+* OSX `10.10.5` and `10.9.5`
+* App release: `1.0.23.90.g42187855`
+* Radio commit tag: `cb2a761`
 
 ## Primary functional tests
+
+*These should be the primary regression tests, either checked manually or preferably through an automated test.*
 
 * I can create a radio station for an artist
 * I can create a radio station for a song
 * I can create a radio station for a genre
+* I can search for a new radio station to create
 * Starting a radio station creates the radio queue
 * I can thumbs up the currently playing song
 * I can thumbs down the currently playing song
@@ -80,6 +83,9 @@ This was tested on:
 * When generating a genre station, it seems as though there is a limited potential set of songs (around 50-100 songs). Pandora treats each genre station as a starting point for exploration, rather than a shuffle feel.
 * You can't create a user radio (eg. I like what my friend listens to, I want to explore their songs).
 * Manually created (collaborative?) radio station does not always queue tracks. This was hard to recreate consistently.
+* We're not indicating to the friends feed that I'm listening to a radio station.
+* Radio stations are unique to a device, meaning that handoff drops some of the features such as voting.
+* When visiting Radio as a brand new user, I was suggested one radio station for Drake. This felt a little weird, as you really don't know what kind of user I am yet. An empty state encouraging me to create stations with some songs/artists would be better than a artist you have no idea if I like.
 
 ## Overall Application Notes for Discussion
 
@@ -100,7 +106,7 @@ This was tested on:
 
 *Caveat: I'm not as familiar with Angular, so it's a little hard to tell if some things are idiomatic or just spat out as part of the build system.*
 
-* radio: Is there a way to not package all of Angular (122K) and jQuery (82K) in?
+* `/radio`: Is there a way to not package all of Angular (122K) and jQuery (82K) in?
 * Would you want to log specific genre when a genre-station is triggered, rather than just a seed title? Could be my misunderstanding here, perhaps the `spotify:genre` index is enough to retrieve the seed
 * radio and radio-hub: Some languages missing translations (maybe not available in those regions?), eg in radio-hub: `hi`, `ko`, `ro`, `ru`, `ta`, `th` all seem to be missing translations.
 

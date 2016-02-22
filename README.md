@@ -1,6 +1,7 @@
 # Radio Beta Release
 
 This was tested on:
+
 * OSX 10.10.5 and 10.9.5
 * App release: 1.0.23.90.g42187855
 * Radio commit tag: cb2a761
@@ -49,6 +50,8 @@ This was tested on:
 
 ## Bugs
 
+*These were bugs indentified during the session. Where possible, I've tried to hunt down a root-cause for the bug which I hope helps.*
+
 * Genre Radio Station buttons do not render as links
     - My guess is this is somewhere in GLUE to work it out. Potentially the button-info class is being overridden. Guess this one really depends on what the style guide calls for in this case.
 * After quitting mid-stream, returning to genre radio returns a previously downvoted song.
@@ -57,13 +60,13 @@ This was tested on:
     - Steps followed: start R&B radio, quit on *Usher - Yeah!*, restart let's me continue it, however trying to click through to Radio eg to vote, stops stream and I am jumped to *Chris Brown - Say Goodbye* (after *Jay-Z - 99 Problems*), 2 songs past where I should be.
     - potentially because `player.js` sets `this.currentStation` to null, which I guess means the player is initialized as per the current song in localStorage. Something in there with onStationStarted is probably conflicting here. My guess is this is a scope problem.
     - might be PlayerState not saving/retrieving current station, meaning it's only fetched on the radio page?
-* Can't modify a vote once cast
-    - If we wanted to modify an existing vote, this would have to send new feedback for storage. This means that the thumbs button state will always be enabled.
 
 ## Notes for Discussion
 
-*These are the sort of things we should talk about these to see if they're to be considered bugs, or just areas for improvement in the future.*
+*These are the sort of things we should talk about these to see if they're to be considered bugs, or just areas for improvement in the future. Some of these might be deliberate choices, however I like to capture these as things that I experienced during exploratory testing.*
 
+* Can't modify a vote once cast.
+    - If we wanted to modify an existing vote, this would have to send new feedback for storage. This means that the thumbs button state will always be enabled.
 * The radio stations list becomes unwieldy at large numbers (eg >20).
 * List of radio stations does not wrap around when clicking the next button. Especially problematic for large lists of stations.
 * It's not possible to rate past (previously played) songs (as Pandora does).
